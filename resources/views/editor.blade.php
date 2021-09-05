@@ -8,19 +8,18 @@
         forceSync: true,
         previewImagesInEditor: true,
         placeholder: "Message",
+        @can('jirai.post.attachments')
         uploadImage: true,
-//        imageUploadFunction: function (file, onSuccess, onError) {
-//            var reader = new FileReader();
-//            reader.readAsDataURL(file);
-//
-//            reader.onload = function () {
-//                onSuccess(reader.result)
-//            };
-//
-//            reader.onerror = function (error) {
-//                console.log('Error: ', error);
-//            };
-//        }
+        imageUploadFunction: function (file, success, failure) {
+            const formData = new FormData();
+            formData.append('file', file, file.name);
+            axios.post('{{ route('jirai.attachments') }}', formData, {}).then(function (response) {
+                success(response.data.location);
+            }).catch(function (error) {
+                failure(error);
+            });
+        },
+        @endcan
     });
 
     if (document.getElementById('markdownEditor').hasAttribute("data-initialValue")) {

@@ -19,6 +19,7 @@ return [
         'message-delete-self' => 'Jirai: Delete his own messages',
         'message-delete-others' => 'Jirai: Delete others messages',
         'admin-settings' => 'Jirai: See and manage settings',
+        'post-attachments' => 'Jirai: Post some screenshot when using text editor',
     ],
 
     'settings' => [

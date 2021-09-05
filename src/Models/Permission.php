@@ -28,6 +28,8 @@ class Permission
 
             'jirai.changelog.post' => 'jirai::admin.permission.changelog-post',
 
+            'jirai.post.attachments' => 'jirai::admin.permission.post-attachments',
+
             'jirai.admin.settings' => 'jirai::admin.permission.admin-settings',
         ]);
     }
