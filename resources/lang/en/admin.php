@@ -2,8 +2,8 @@
 
 return [
     'nav' => [
-        'title' => 'Discord auth',
-        'settings' => 'Paramètres',
+        'title' => 'Jirai',
+        'settings' => 'Settings',
     ],
 
     'permission' => [
