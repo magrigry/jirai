@@ -16,7 +16,7 @@ I would appreciate pull request either to improve code quality or improve / add 
 * Add tag to issues depending on your role 
 
 # Incoming features
-* [ ] Discord webhook may mention discord that did contribute to an issue using the (discord-auth)[https://market.azuriom.com/resources/62?locale=en] plugin
+* [ ] Discord webhook may mention discord that did contribute to an issue using the [discord-auth](https://market.azuriom.com/resources/62?locale=en) plugin
 * [ ] Improve UI, mostly text editor, to add ability to mention an issue or a changelog 
 * [ ] Add automatic messages when a tag is added 
 * [ ] Add filters for issues (closed/open/tag/user/search)
