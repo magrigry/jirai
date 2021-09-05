@@ -2,8 +2,7 @@
 
 namespace Azuriom\Plugin\Jirai\Models;
 
-
-use Azuriom\Plugin\DiscordAuth\Models\User;
+use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
