@@ -24,5 +24,6 @@ return [
     'plugin-name' => 'Jirai',
     'global-settings' => 'Global settings',
     'tags-settings' => 'Tags settings',
-    'click_to_see_more' => '[Open to see more](:url)'
+    'click_to_see_more' => '[Open to see more](:url)',
+    'has_changed_title' => '**:user** has change title ~~:old_title~~ to :new_title',
 ];

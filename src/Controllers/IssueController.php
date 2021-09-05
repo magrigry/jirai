@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Jirai\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Jirai\Models\JiraiIssue;
+use Azuriom\Plugin\Jirai\Models\JiraiMessage;
 use Azuriom\Plugin\Jirai\Models\JiraiTag;
 use Azuriom\Plugin\Jirai\Models\Permission;
 use Azuriom\Plugin\Jirai\Models\Setting;
@@ -109,6 +110,18 @@ class IssueController extends Controller
 
         if ($issue->closed == true && $request->get('closed') == false) {
             $issue->open();
+        }
+
+        if ($issue->title != $request->get('title')) {
+            $message = new JiraiMessage();
+            $message->message = trans('jirai::messages.has_changed_title', [
+                'user' => $issue->user->name,
+                'old_title' => $issue->title,
+                'new_title' => $request->get('title'),
+            ]);
+            $message->user_id = Auth::id();
+            $message->jirai_issue_id = $issue->id;
+            $message->save();
         }
 
         $issue->update($request->validated());
