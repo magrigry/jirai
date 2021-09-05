@@ -1,0 +1,14 @@
+{
+    "id": "jirai",
+    "name": "jirai",
+    "description": "Plugin for Azuriom",
+    "version": "1.0.0",
+    "url": "https://azuriom.com",
+    "authors": [
+        "Azuriom"
+    ],
+    "providers": [
+        "\\Azuriom\\Plugin\\Jirai\\Providers\\JiraiServiceProvider",
+        "\\Azuriom\\Plugin\\Jirai\\Providers\\RouteServiceProvider"
+    ]
+}
