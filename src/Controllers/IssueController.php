@@ -113,6 +113,8 @@ class IssueController extends Controller
 
         $issue->update($request->validated());
 
+        $issue->jiraiTags()->sync($request->input('tags'));
+
         DiscordWebhook::sendWebhook(
             $issue->type == JiraiIssue::TYPE_SUGGESTION
                 ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
