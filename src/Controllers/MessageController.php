@@ -28,7 +28,8 @@ class MessageController extends Controller
             $message->message,
             route('jirai.issues.show', $message->jiraiIssue),
             '9937374',
-            true
+            true,
+            $message->jiraiIssue->getContributors()
         );
 
         return redirect()->back();

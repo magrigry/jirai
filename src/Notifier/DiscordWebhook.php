@@ -4,14 +4,15 @@ namespace Azuriom\Plugin\Jirai\Notifier;
 
 use Azuriom\Support\Discord\Embed;
 use Illuminate\Http\Client\HttpClientException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class DiscordWebhook extends \Azuriom\Support\Discord\DiscordWebhook
 {
 
-    private static function resizeContent($content, $url) {
+    private static function resizeContent($content, $url, $padding) {
 
-        if (strlen($content) > 4000) {
+        if (strlen($content) > 4000 - $padding) {
             $content = substr($content, 0, 4000);
             $content .= "\n\n" . trans('jirai::messages.click_to_see_more', ['url' => $url]);
         }
@@ -29,14 +30,21 @@ class DiscordWebhook extends \Azuriom\Support\Discord\DiscordWebhook
         return str_replace('@', '\@', $text);
     }
 
-    public static function sendWebhook($webhook, $title, $content, $url, $color, $protectFromMention = true)
+    public static function sendWebhook($webhook, $title, $content, $url, $color, $protectFromMention = true, $usersToMention = [])
     {
+        $mentions = '';
+        if (class_exists('\Azuriom\Plugin\DiscordAuth\Models\Discord')) {
+            $discords = \Azuriom\Plugin\DiscordAuth\Models\Discord::whereIn('user_id', $usersToMention)->get();
+            foreach ($discords as $discord) {
+                $mentions .= sprintf('<@%s> ', $discord->discord_id);
+            }
+        }
 
         if (empty($webhook)) {
             return null;
         }
 
-        $content = self::resizeContent($content, $url);
+        $content = self::resizeContent($content, $url, strlen($mentions));
         $content = self::replaceListCharacter($content);
 
         if ($protectFromMention) {
@@ -51,7 +59,12 @@ class DiscordWebhook extends \Azuriom\Support\Discord\DiscordWebhook
         $embed->color($color);
 
         try {
-            self::create()->addEmbed($embed)->send($webhook);
+            self::create()
+                ->content($mentions)
+                ->username(Auth::user()->name)
+                ->avatarUrl(Auth::user()->getAvatar())
+                ->addEmbed($embed)
+                ->send($webhook);
         } catch (HttpClientException $e) {
             Log::alert($e->getMessage());
         }
