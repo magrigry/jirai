@@ -19,6 +19,6 @@ I would appreciate pull request either to improve code quality or improve / add 
 * [ ] Discord webhook may mention discord users that did contribute to an issue using the [discord-auth](https://market.azuriom.com/resources/62?locale=en) plugin
 * [ ] Improve UI, mostly text editor, to add ability to mention an issue or a changelog 
 * [ ] Add automatic messages when a tag is added 
-* [ x ] Add automatic messages when title changes
+* [x] Add automatic messages when title changes
 * [ ] Add filters for issues (closed/open/tag/user/search)
-* [ x ] Add ability to upload images from editor
+* [x] Add ability to upload images from editor
