@@ -124,20 +124,22 @@ class IssueController extends Controller
             $message->save();
         }
 
+        if ($issue->message != $request->validated()['message'] || $issue->title != $request->validated()['title']) {
+            DiscordWebhook::sendWebhook(
+                $issue->type == JiraiIssue::TYPE_SUGGESTION
+                    ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
+                    : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
+                $issue->title,
+                $issue->message,
+                route('jirai.issues.show', $issue),
+                '9937374',
+                true
+            );
+        }
+
         $issue->update($request->validated());
 
         $issue->jiraiTags()->sync($request->input('tags'));
-
-        DiscordWebhook::sendWebhook(
-            $issue->type == JiraiIssue::TYPE_SUGGESTION
-                ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-                : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-            $issue->title,
-            $issue->message,
-            route('jirai.issues.show', $issue),
-            '9937374',
-            true
-        );
 
         return redirect()->route('jirai.issues.show', $issue)->with('success', trans('jirai::messages.done'));
     }
