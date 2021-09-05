@@ -2,7 +2,7 @@
 
 return [
     'changelog' => 'Changelog',
-    'new' => 'Nouveau',
+    'new' => 'new',
     'open' => 'open',
     'closed' => 'closed',
     'suggestions' => 'Suggestions',
