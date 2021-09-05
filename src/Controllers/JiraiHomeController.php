@@ -25,12 +25,14 @@ class JiraiHomeController extends Controller
             [
                 'suggestions' => JiraiIssue::with('jiraiTags')
                     ->with('user')
+                    ->with('messages')
                     ->where('type', JiraiIssue::TYPE_SUGGESTION)
                     ->orderByDesc('id')
                     ->paginate(Setting::getSetting(Setting::SETTING_ISSUES_PER_PAGES)->getValue(), ['*'], JiraiIssue::TYPE_SUGGESTION),
 
                 'bugs' => JiraiIssue::with('jiraiTags')
                     ->with('user')
+                    ->with('messages')
                     ->where('type', JiraiIssue::TYPE_BUG)
                     ->orderByDesc('id')
                     ->paginate(Setting::getSetting(Setting::SETTING_ISSUES_PER_PAGES)->getValue(), ['*'], JiraiIssue::TYPE_BUG),
