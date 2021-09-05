@@ -9,21 +9,18 @@
         previewImagesInEditor: true,
         placeholder: "Message",
         uploadImage: true,
-        insertTexts: {
-            image: ["[](", ")"],
-        },
-        imageUploadFunction: function (file, onSuccess, onError) {
-            var reader = new FileReader();
-            reader.readAsDataURL(file);
-
-            reader.onload = function () {
-                onSuccess(reader.result)
-            };
-
-            reader.onerror = function (error) {
-                console.log('Error: ', error);
-            };
-        }
+//        imageUploadFunction: function (file, onSuccess, onError) {
+//            var reader = new FileReader();
+//            reader.readAsDataURL(file);
+//
+//            reader.onload = function () {
+//                onSuccess(reader.result)
+//            };
+//
+//            reader.onerror = function (error) {
+//                console.log('Error: ', error);
+//            };
+//        }
     });
 
     if (document.getElementById('markdownEditor').hasAttribute("data-initialValue")) {
