@@ -3,6 +3,9 @@ An azuriom plugin to manage issues and changelogs
 
 Note : An issue can be either a bug or a suggestion
 
+# Demo 
+https://www.over2craft.com/jirai
+
 # Disclaimer
 This is a very very first release of a plugin that aim to give ability 
 to server administrators to manage their bugs, suggestions and changelogs in a better way
@@ -22,3 +25,6 @@ I would appreciate pull request either to improve code quality or improve / add 
 * [x] Add automatic messages when title changes
 * [ ] Add filters for issues (closed/open/tag/user/search)
 * [x] Add ability to upload images from editor
+* [ ] Make an issue privatable so tags role restriction also apply to visibilty
+* [ ] add tags in issues title
+* [ ] French translation
