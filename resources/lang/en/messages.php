@@ -7,7 +7,7 @@ return [
     'closed' => 'closed',
     'suggestions' => 'Suggestions',
     'bugs' => 'Bugs',
-    'title' => 'Changelog, bugs et suggestions',
+    'title' => 'Changelog, bugs, suggestions',
     'done' => 'Everything done !',
     'issue_solved_in' => 'Issue resolved in [#:id](:url)',
     'issue_closed' => "[#:id [:type] :title](:url) has been closed",
