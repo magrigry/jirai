@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', trans('admin.redirects.title-edit', ['redirect' => $issue->id]))
+@section('title', trans('jirai::messages.title'))
 
 @section('content')
     <div class="container content">

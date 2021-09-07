@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', trans('admin.redirects.title-create'))
+@section('title', trans('jirai::messages.title'))
 
 @section('content')
 
