@@ -6,23 +6,24 @@
 
 <div class="container">
 
-    <div class="card-body">
-        <img class="rounded float-left mr-4" src="{{ $issue->user->getAvatar() }}" alt="{{ $issue->user->name }}" height="55">
-        <h1 class="card-title">{{ $issue->title }}</h1>
-        <div class="d-flex justify-content-between align-items-center">
-            <span>@lang('messages.posts.posted', ['user' => e($issue->user->name), 'date' => format_date($issue->created_at, true)])</span>
-            <div>
-                @hasJiraiIssueEditPermission($issue->user_id)
+    <div class="card mt-5 mb-5">
+        <div class="card-header">
+            <img class="rounded float-left mr-4" src="{{ $issue->user->getAvatar() }}" alt="{{ $issue->user->name }}" height="55">
+            <h1 class="card-title">{{ $issue->title }}</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <span>@lang('messages.posts.posted', ['user' => e($issue->user->name), 'date' => format_date($issue->created_at, true)])</span>
+                <div>
+                    @hasJiraiIssueEditPermission($issue->user_id)
                     <a class="btn btn-danger" href="{{ route('jirai.issues.edit', ['issue' => $issue->id]) }}">{{ trans('jirai::messages.edit') }}</a>
-                @endhasJiraiIssueEditPermission
+                    @endhasJiraiIssueEditPermission
 
-                @hasJiraiIssueDeletePermission($issue->user_id)
+                    @hasJiraiIssueDeletePermission($issue->user_id)
                     <a class="btn btn-danger" href="{{ route('jirai.issues.destroy', ['issue' => $issue->id]) }}" data-confirm="delete">{{ trans('jirai::messages.delete') }}</a>
-                @endhasJiraiIssueDeletePermission
+                    @endhasJiraiIssueDeletePermission
+                </div>
             </div>
         </div>
-        <hr>
-        <div class="card-text user-html-content mt-5">
+        <div class="card-body user-html-content p-2">
             {!! \Azuriom\Support\Markdown::parse($issue->message) !!}
         </div>
     </div>
