@@ -39,6 +39,16 @@ class JiraiIssue extends Model
 
     protected $fillable = ['title', 'message', 'type', 'closed', 'user_id'];
 
+    public function getTitleWithTags(): string
+    {
+        $tags = '';
+        foreach ($this->jiraiTags as $tag) {
+            $tags .= sprintf("[%s]", $tag->name);
+        }
+
+        return $this->title . ' ' . $tags;
+    }
+
     public function messages()
     {
         return $this->hasMany(JiraiMessage::class);

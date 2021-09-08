@@ -23,7 +23,7 @@ class SendWebhook
     {
         self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
-            $e->issue->title,
+            $e->issue->getTitleWithTags(),
             $e->issue->message,
             route('jirai.issues.show', $e->issue),
             '9937374',
@@ -36,7 +36,7 @@ class SendWebhook
         if ($e->oldIssue->message != $e->issue->message  || $e->oldIssue->title != $e->issue->title) {
             self::sendWebhook(
                 Setting::getWebhookUrlFor($e->issue->type),
-                $e->issue->title,
+                $e->issue->getTitleWithTags(),
                 $e->issue->message,
                 route('jirai.issues.show', $e->issue),
                 '9937374',
@@ -49,7 +49,7 @@ class SendWebhook
     {
         self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
-            $e->issue->title,
+            $e->issue->getTitleWithTags(),
             $e->getClosedMessage(),
             route('jirai.issues.show', $e->issue),
             '15548997',
@@ -62,7 +62,7 @@ class SendWebhook
     {
         self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
-            $e->issue->title,
+            $e->issue->getTitleWithTags(),
             $e->getOpenMessage(),
             route('jirai.issues.show', $e->issue),
             '9937374',
@@ -76,7 +76,7 @@ class SendWebhook
     {
         self::sendWebhook(
             Setting::getWebhookUrlFor($e->message->jiraiIssue->type),
-            $e->message->jiraiIssue->title,
+            $e->message->jiraiIssue->getTitleWithTags(),
             $e->message->message,
             route('jirai.issues.show', $e->message->jiraiIssue),
             '9937374',
@@ -142,7 +142,7 @@ class SendWebhook
             return null;
         }
 
-        $content = self::resizeContent($content, $url, strlen($mentions));
+        $content = self::resizeContent($content, $url, strlen($mentions) + strlen($title));
         $content = self::replaceListCharacter($content);
 
         if ($protectFromMention) {
