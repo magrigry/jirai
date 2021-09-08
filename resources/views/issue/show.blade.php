@@ -10,6 +10,17 @@
         <div class="card-header">
             <img class="rounded float-left mr-4" src="{{ $issue->user->getAvatar() }}" alt="{{ $issue->user->name }}" height="55">
             <h1 class="card-title">{{ $issue->title }}</h1>
+            <div>
+                @if ($issue->closed)
+                    <button class="btn btn-danger btn-sm font-weight-bold">{{ trans('jirai::messages.closed') }}</button>
+                @else
+                    <button class="btn btn-success btn-sm rounded-pill font-weight-bold">{{ trans('jirai::messages.open') }}</button>
+                @endif
+
+                @foreach($issue->jiraiTags as $tag)
+                    <button class="btn {{ $tag->color }} rounded-pill font-weight-bold btn-sm">{{ $tag->name }}</button>
+                @endforeach
+            </div>
             <div class="d-flex justify-content-between align-items-center">
                 <span>@lang('messages.posts.posted', ['user' => e($issue->user->name), 'date' => format_date($issue->created_at, true)])</span>
                 <div>
