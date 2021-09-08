@@ -10,14 +10,18 @@ use Azuriom\Plugin\Jirai\Events\IssueUpdatedEvent;
 use Azuriom\Plugin\Jirai\Events\IssueReopenedEvent;
 use Azuriom\Plugin\Jirai\Events\MessagePostedEvent;
 use Azuriom\Plugin\Jirai\Models\Setting;
-use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
+use Azuriom\Support\Discord\DiscordWebhook;
+use Azuriom\Support\Discord\Embed;
+use Illuminate\Http\Client\HttpClientException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SendWebhook
 {
 
     public function onIssueCreated(IssueCreatedEvent $e)
     {
-        DiscordWebhook::sendWebhook(
+        self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
             $e->issue->title,
             $e->issue->message,
@@ -30,7 +34,7 @@ class SendWebhook
     public function onIssueUpdated(IssueUpdatedEvent $e)
     {
         if ($e->oldIssue->message != $e->issue->message  || $e->oldIssue->title != $e->issue->title) {
-            DiscordWebhook::sendWebhook(
+            self::sendWebhook(
                 Setting::getWebhookUrlFor($e->issue->type),
                 $e->issue->title,
                 $e->issue->message,
@@ -43,7 +47,7 @@ class SendWebhook
 
     public function onIssueClosed(IssueClosedEvent $e)
     {
-        DiscordWebhook::sendWebhook(
+        self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
             $e->issue->title,
             $e->getClosedMessage(),
@@ -56,7 +60,7 @@ class SendWebhook
 
     public function onIssueOpened(IssueReopenedEvent $e)
     {
-        DiscordWebhook::sendWebhook(
+        self::sendWebhook(
             Setting::getWebhookUrlFor($e->issue->type),
             $e->issue->title,
             $e->getOpenMessage(),
@@ -70,7 +74,7 @@ class SendWebhook
 
     public function onMessagePosted(MessagePostedEvent $e)
     {
-        DiscordWebhook::sendWebhook(
+        self::sendWebhook(
             Setting::getWebhookUrlFor($e->message->jiraiIssue->type),
             $e->message->jiraiIssue->title,
             $e->message->message,
@@ -82,7 +86,7 @@ class SendWebhook
     }
 
     public function changelog(ChangelogPostedEvent $e) {
-        DiscordWebhook::sendWebhook(
+        self::sendWebhook(
             Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_CHANGELOGS)->getValue(),
             $e->changelog->description,
             $e->changelog->message,
@@ -102,6 +106,66 @@ class SendWebhook
             MessagePostedEvent::class => 'onMessagePosted',
             ChangelogPostedEvent::class => 'changelog',
         ];
+    }
+
+    private static function resizeContent($content, $url, $padding) {
+
+        if (strlen($content) > 4000 - $padding) {
+            $content = substr($content, 0, 4000);
+            $content .= "\n\n" . trans('jirai::messages.click_to_see_more', ['url' => $url]);
+        }
+
+        return $content;
+    }
+
+    private static function replaceListCharacter($content) {
+        $pattern = '/(\r?\n)( *)\*/';
+        $replace = '$1$2•';
+        return preg_replace($pattern, $replace, $content);
+    }
+
+    private static function protectFromMention($text) {
+        return str_replace('@', '\@', $text);
+    }
+
+    private static function sendWebhook($webhook, $title, $content, $url, $color, $protectFromMention = true, $usersToMention = [])
+    {
+        $mentions = '';
+        if (class_exists('\Azuriom\Plugin\DiscordAuth\Models\Discord')) {
+            $discords = \Azuriom\Plugin\DiscordAuth\Models\Discord::whereIn('user_id', $usersToMention)->get();
+            foreach ($discords as $discord) {
+                $mentions .= sprintf('<@%s> ', $discord->discord_id);
+            }
+        }
+
+        if (empty($webhook)) {
+            return null;
+        }
+
+        $content = self::resizeContent($content, $url, strlen($mentions));
+        $content = self::replaceListCharacter($content);
+
+        if ($protectFromMention) {
+            $title = self::protectFromMention($title);
+            $content = self::protectFromMention($content);
+        }
+
+        $embed = new Embed();
+        $embed->title($title);
+        $embed->url($url);
+        $embed->description($content);
+        $embed->color($color);
+
+        try {
+            DiscordWebhook::create()
+                ->content($mentions)
+                ->username(Auth::user()->name)
+                ->avatarUrl(Auth::user()->getAvatar())
+                ->addEmbed($embed)
+                ->send($webhook);
+        } catch (HttpClientException $e) {
+            Log::alert($e->getMessage());
+        }
     }
 
 }
