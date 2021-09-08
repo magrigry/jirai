@@ -3,12 +3,11 @@
 namespace Azuriom\Plugin\Jirai\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Jirai\Events\IssueCreatedEvent;
+use Azuriom\Plugin\Jirai\Events\IssueUpdatedEvent;
 use Azuriom\Plugin\Jirai\Models\JiraiIssue;
-use Azuriom\Plugin\Jirai\Models\JiraiMessage;
 use Azuriom\Plugin\Jirai\Models\JiraiTag;
 use Azuriom\Plugin\Jirai\Models\Permission;
-use Azuriom\Plugin\Jirai\Models\Setting;
-use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
 use Azuriom\Plugin\Jirai\Requests\JiraiIssueRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -59,16 +58,7 @@ class IssueController extends Controller
 
         $issue->jiraiTags()->sync($request->input('tags'));
 
-        DiscordWebhook::sendWebhook(
-            $issue->type == JiraiIssue::TYPE_SUGGESTION
-            ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-            : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-            $issue->title,
-            $issue->message,
-            route('jirai.issues.show', $issue),
-            '9937374',
-            true
-        );
+        event(new IssueCreatedEvent($issue));
 
         return redirect()->route('jirai.home')->with('success', trans('jirai::messages.done'));
     }
@@ -103,43 +93,22 @@ class IssueController extends Controller
     {
         $this->middleware('auth');
         $this->checkEditPermission($issue);
-
-        if ($issue->closed == false && $request->get('closed') == true) {
-            $issue->close();
-        }
-
-        if ($issue->closed == true && $request->get('closed') == false) {
-            $issue->open();
-        }
-
-        if ($issue->title != $request->get('title')) {
-            $message = new JiraiMessage();
-            $message->message = trans('jirai::messages.has_changed_title', [
-                'user' => $issue->user->name,
-                'old_title' => $issue->title,
-                'new_title' => $request->get('title'),
-            ]);
-            $message->user_id = Auth::id();
-            $message->jirai_issue_id = $issue->id;
-            $message->save();
-        }
-
-        if ($issue->message != $request->validated()['message'] || $issue->title != $request->validated()['title']) {
-            DiscordWebhook::sendWebhook(
-                $issue->type == JiraiIssue::TYPE_SUGGESTION
-                    ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-                    : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-                $issue->title,
-                $issue->message,
-                route('jirai.issues.show', $issue),
-                '9937374',
-                true
-            );
-        }
+        $oldIssue = $issue->replicate();
 
         $issue->update($request->validated());
 
+
+        event(new IssueUpdatedEvent($issue, $oldIssue));
+
         $issue->jiraiTags()->sync($request->input('tags'));
+
+        if ($oldIssue->closed == false && $request->get('closed') == true) {
+            $issue->close();
+        }
+
+        if ($oldIssue->closed == true && $request->get('closed') == false) {
+            $issue->open();
+        }
 
         return redirect()->route('jirai.issues.show', $issue)->with('success', trans('jirai::messages.done'));
     }

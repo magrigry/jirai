@@ -4,7 +4,6 @@ namespace Azuriom\Plugin\Jirai\Models;
 
 
 use Azuriom\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string message
  *
  * @property integer jirai_issue_id
+ * @property integer user_id
  *
  * @property JiraiIssue $jiraiIssue
  *

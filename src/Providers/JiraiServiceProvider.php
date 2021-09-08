@@ -8,6 +8,7 @@ use Illuminate\Pagination\Paginator;
 
 class JiraiServiceProvider extends BasePluginServiceProvider
 {
+
     /**
      * The plugin's global HTTP middleware stack.
      *
@@ -50,8 +51,7 @@ class JiraiServiceProvider extends BasePluginServiceProvider
     public function register()
     {
         $this->registerMiddlewares();
-
-        //
+        $this->app->register(EventServiceProvider::class);
     }
 
     /**

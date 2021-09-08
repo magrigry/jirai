@@ -4,9 +4,6 @@
 namespace Azuriom\Plugin\Jirai\Models;
 
 
-use Illuminate\Contracts\Foundation\Application;
-use phpDocumentor\Reflection\Types\Self_;
-
 class Setting
 {
 
@@ -139,5 +136,20 @@ class Setting
         }
 
         return $return;
+    }
+
+    /**
+     * Return the right webhook url depending on the asked issue type
+     *
+     * @param $type
+     * @return string
+     */
+    public static function getWebhookUrlFor($type): string
+    {
+        if ($type == JiraiIssue::TYPE_SUGGESTION) {
+            return Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue();
+        }
+
+        return Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue();
     }
 }

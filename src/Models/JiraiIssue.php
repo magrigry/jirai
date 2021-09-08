@@ -4,11 +4,11 @@ namespace Azuriom\Plugin\Jirai\Models;
 
 
 use Azuriom\Models\User;
-use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
+use Azuriom\Plugin\Jirai\Events\IssueClosedEvent;
+use Azuriom\Plugin\Jirai\Events\IssueReopenedEvent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Lang;
 
 /**
  * Class Issue
@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Lang;
  * @property boolean closed
  * @property string type
  * @property string title
+ * @property int user_id
  *
  * @property User $user
  * @property Collection<JiraiMessage> $messages
@@ -55,76 +56,24 @@ class JiraiIssue extends Model
 
     public function close()
     {
-        $type = JiraiIssue::TYPES[$this->type];
-        $title = $this->title;
-        $id = $this->id;
+        if (!$this->closed) {
+            $this->closed = true;
+            $this->save();
+        }
 
-        $this->closed = true;
-        $this->save();
-
-        $closeMsg = Lang::get('jirai::messages.issue_closed', [
-            'id' => $id,
-            'type' => $type,
-            'title' => $title,
-            'url' => route('jirai.issues.show', $id),
-        ]);
-
-        DiscordWebhook::sendWebhook(
-            $this->type == JiraiIssue::TYPE_SUGGESTION
-                ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-                : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-            $this->title,
-            $closeMsg,
-            route('jirai.issues.show', $this),
-            '15548997',
-            false,
-            $this->getContributors()
-        );
-
-        $message = new JiraiMessage();
-        $message->message = $closeMsg;
-        $message->user_id = Auth::id();
-        $message->jirai_issue_id = $this->id;
-        $message->save();
-
-        return $closeMsg;
+        event($e = new IssueClosedEvent($this));
+        return $e->getClosedMessage();
     }
 
     public function open()
     {
-        $type = JiraiIssue::TYPES[$this->type];
-        $title = $this->title;
-        $id = $this->id;
+        if ($this->closed) {
+            $this->closed = false;
+            $this->save();
+        }
 
-        $this->closed = false;
-        $this->save();
-
-        $openMsg = Lang::get('jirai::messages.issue_reopened', [
-            'id' => $id,
-            'type' => $type,
-            'title' => $title,
-            'url' => route('jirai.issues.show', $id),
-        ]);
-
-        DiscordWebhook::sendWebhook(
-            $this->type == JiraiIssue::TYPE_SUGGESTION
-                ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-                : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-            $this->title,
-            $openMsg,
-            route('jirai.issues.show', $this),
-            '3066993',
-            false,
-            $this->getContributors()
-        );
-
-        $message = new JiraiMessage();
-        $message->message = $openMsg;
-        $message->user_id = Auth::id();
-        $message->jirai_issue_id = $this->id;
-        $message->save();
-
-        return $openMsg;
+        event($e = new IssueReopenedEvent($this));
+        return $e->getOpenMessage();
     }
 
     /**

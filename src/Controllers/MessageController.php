@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Jirai\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\Jirai\Events\MessagePostedEvent;
 use Azuriom\Plugin\Jirai\Models\JiraiIssue;
 use Azuriom\Plugin\Jirai\Models\JiraiMessage;
 use Azuriom\Plugin\Jirai\Models\Setting;
@@ -18,19 +19,9 @@ class MessageController extends Controller
         $this->middleware('auth');
         $this->userHasPostPermission();
 
-        $message = JiraiMessage::create($request->validated() + ['user_id' => Auth::user()->id]);
+        $message = JiraiMessage::create($request->validated() + ['user_id' => Auth::id()]);
 
-        DiscordWebhook::sendWebhook(
-            $message->jiraiIssue->type == JiraiIssue::TYPE_SUGGESTION
-                ? Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_SUGGESTIONS)->getValue()
-                : Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_BUGS)->getValue(),
-            $message->jiraiIssue->title,
-            $message->message,
-            route('jirai.issues.show', $message->jiraiIssue),
-            '9937374',
-            true,
-            $message->jiraiIssue->getContributors()
-        );
+        event(new MessagePostedEvent($message));
 
         return redirect()->back();
     }
