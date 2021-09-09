@@ -15,6 +15,25 @@
         forceSync: true,
         previewImagesInEditor: true,
         placeholder: "Message",
+        spellChecker: false,
+        nativeSpellcheck: true,
+        autosave: {
+            enabled: true,
+            uniqueId: "{{ \Illuminate\Support\Facades\Request::path() }}",
+            delay: 500,
+            submit_delay: 5000,
+            timeFormat: {
+                locale: 'fr-FR',
+                format: {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                },
+            },
+            text: "Autosaved: "
+        },
         @can('jirai.post.attachments')
         uploadImage: true,
         imageUploadFunction: function (file, success, failure) {
@@ -32,10 +51,6 @@
     if (document.getElementById('markdownEditor').hasAttribute("data-initialValue")) {
         easyMDE.value(document.getElementById('markdownEditor').getAttribute("data-initialValue"))
     }
-
-    easyMDE.codemirror.on("inputRead", function(codeMirror, obj){
-        console.log(codeMirror)
-    });
 
 </script>
 @endpush
