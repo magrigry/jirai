@@ -4,9 +4,8 @@ namespace Azuriom\Plugin\Jirai\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Jirai\Events\MessagePostedEvent;
-use Azuriom\Plugin\Jirai\Models\JiraiIssue;
 use Azuriom\Plugin\Jirai\Models\JiraiMessage;
-use Azuriom\Plugin\Jirai\Models\Setting;
+use Azuriom\Plugin\Jirai\Models\Permission;
 use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
 use Azuriom\Plugin\Jirai\Requests\JiraiMessageRequest;
 use Illuminate\Support\Facades\Auth;
@@ -53,9 +52,7 @@ class MessageController extends Controller
 
     private function userHasEditPermission($message)
     {
-        if (($message->user_id != Auth::id() && !Auth::user()->hasPermission('jirai.messages.edit.others'))
-            || Auth::user()->hasPermission('jirai.messages.edit.self')
-        ) {
+        if (!Permission::hasJiraiMessageEditPermission($message->user_id)) {
             abort(403);
         }
     }
@@ -68,9 +65,7 @@ class MessageController extends Controller
 
     private function userHasDeletePermission($message)
     {
-        if (($message->user_id != Auth::id() && !Auth::user()->hasPermission('jirai.messages.delete.others'))
-            || Auth::user()->hasPermission('jirai.messages.delete.self')
-        ) {
+        if (!Permission::hasJiraiMessageDeletePermission($message->user_id)) {
             abort(403);
         }
     }
