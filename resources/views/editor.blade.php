@@ -1,8 +1,15 @@
-<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
-<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+@push('scripts')
 
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+@endpush
 
-<script>
+@push('styles')
+
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+@endpush
+
+@push('footer-scripts')
+<script type="text/javascript">
     var easyMDE = new EasyMDE({
         element: document.getElementById('markdownEditor'),
         forceSync: true,
@@ -31,3 +38,4 @@
     });
 
 </script>
+@endpush
