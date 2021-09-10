@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/magrigry/jirai/badge)](https://www.codefactor.io/repository/github/magrigry/jirai)
+
 # jirai
 An azuriom plugin to manage issues and changelogs
 
@@ -7,7 +9,8 @@ https://www.over2craft.com/jirai
 # Disclaimer
 This is a very very first release of a plugin that aim to give ability 
 to server administrators to manage their bugs, suggestions and changelogs in a better way
-I would appreciate pull request either to improve code quality or improve / add some feature
+
+I would appreciate pull request either to improve code quality or improve and add some feature
 
 # Current features
 * You or your users can create some issues from a dashboard using a markdown editor. An issue can be either a suggestion, or a bug. 
