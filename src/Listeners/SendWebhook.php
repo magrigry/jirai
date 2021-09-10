@@ -128,7 +128,7 @@ class SendWebhook
         return str_replace('@', '\@', $text);
     }
 
-    private static function sendWebhook($webhook, $title, $content, $url, $color, $protectFromMention = true, $usersToMention = [])
+    public static function sendWebhook($webhook, $title, $content, $url, $color, $protectFromMention = true, $usersToMention = [])
     {
         $mentions = '';
         if (class_exists('\Azuriom\Plugin\DiscordAuth\Models\Discord')) {

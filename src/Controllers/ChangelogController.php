@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\Jirai\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Jirai\Events\ChangelogPostedEvent;
+use Azuriom\Plugin\Jirai\Listeners\SendWebhook;
 use Azuriom\Plugin\Jirai\Models\JiraiChangelog;
 use Azuriom\Plugin\Jirai\Models\JiraiIssue;
 use Azuriom\Plugin\Jirai\Models\JiraiMessage;
@@ -32,6 +33,15 @@ class ChangelogController extends Controller
 
         $changelog = JiraiChangelog::create($data);
         $this->addReferencesToMessages($changelog, $request->get('issues'));
+
+        SendWebhook::sendWebhook(
+            Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_CHANGELOGS)->getValue(),
+            $changelog->description,
+            $changelog->message,
+            route('jirai.changelogs.show', $changelog),
+            '9937374',
+            false
+        );
 
         return redirect(route('jirai.changelogs.show', $changelog->id));
     }
