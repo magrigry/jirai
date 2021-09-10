@@ -61,7 +61,7 @@ class CreateJiraiTables extends Migration
 
         Schema::create('jirai_changelogs', function (Blueprint $table) {
             $table->id();
-            $table->tinyText('description');
+            $table->string('description');
             $table->longText('message');
             $table->unsignedInteger('user_id');
             $table->timestamps();
