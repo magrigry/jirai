@@ -10,5 +10,9 @@
     "providers": [
         "\\Azuriom\\Plugin\\Jirai\\Providers\\JiraiServiceProvider",
         "\\Azuriom\\Plugin\\Jirai\\Providers\\RouteServiceProvider"
-    ]
+    ],
+    "dependencies": {
+        "azuriom": "^0.4.0",
+        "discord-auth?": "^1.2.0"
+    }
 }
