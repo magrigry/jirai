@@ -56,8 +56,9 @@ class MessageController extends Controller
         }
     }
 
-    private function userHasPostPermission() {
-        if (!Auth::user()->hasPermission('jirai.messages.post')) {
+    private function userHasPostPermission()
+    {
+        if (!Auth::user()->hasPermission('jirai.message.post')) {
             abort(403);
         }
     }
