@@ -6,7 +6,6 @@ use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Jirai\Events\MessagePostedEvent;
 use Azuriom\Plugin\Jirai\Models\JiraiMessage;
 use Azuriom\Plugin\Jirai\Models\Permission;
-use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
 use Azuriom\Plugin\Jirai\Requests\JiraiMessageRequest;
 use Illuminate\Support\Facades\Auth;
 

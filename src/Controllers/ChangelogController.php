@@ -9,7 +9,6 @@ use Azuriom\Plugin\Jirai\Models\JiraiIssue;
 use Azuriom\Plugin\Jirai\Models\JiraiMessage;
 use Azuriom\Plugin\Jirai\Models\Permission;
 use Azuriom\Plugin\Jirai\Models\Setting;
-use Azuriom\Plugin\Jirai\Notifier\DiscordWebhook;
 use Azuriom\Plugin\Jirai\Requests\JiraiChangelogRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,15 +32,6 @@ class ChangelogController extends Controller
 
         $changelog = JiraiChangelog::create($data);
         $this->addReferencesToMessages($changelog, $request->get('issues'));
-
-        DiscordWebhook::sendWebhook(
-            Setting::getSetting(Setting::SETTING_DISCORD_WEB_HOOK_FOR_CHANGELOGS)->getValue(),
-            $changelog->description,
-            $changelog->message,
-            route('jirai.changelogs.show', $changelog),
-            '9937374',
-            false
-        );
 
         return redirect(route('jirai.changelogs.show', $changelog->id));
     }
