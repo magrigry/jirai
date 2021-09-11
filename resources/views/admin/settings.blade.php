@@ -21,7 +21,7 @@
                                id="{{ $setting->getName() }}"
                                placeholder="{{ trans($setting->getTranslationKey()) }}"
                                name="{{ trans($setting->getName()) }}"
-                               value="{{ setting($setting->getDbKey(), $setting->getDefaultValue()) }}"
+                               value="{{ $setting->getValue() }}"
                         >
                     </div>
                 @endforeach

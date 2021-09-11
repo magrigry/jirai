@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Jirai\Providers;
 
 use Azuriom\Extensions\Plugin\BaseRouteServiceProvider;
+use Azuriom\Plugin\Jirai\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends BaseRouteServiceProvider
@@ -14,7 +15,7 @@ class RouteServiceProvider extends BaseRouteServiceProvider
      */
     public function loadRoutes()
     {
-        Route::prefix($this->plugin->id)
+        Route::prefix(Setting::getSetting(Setting::SETTING_ROUTE_PREFIX)->getValue())
             ->middleware('web')
             ->name($this->plugin->id.'.')
             ->group(plugin_path($this->plugin->id.'/routes/web.php'));

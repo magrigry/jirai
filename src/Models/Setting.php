@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Azuriom\Plugin\Jirai\Models;
 
+use Illuminate\Support\Facades\Cache;
 
 class Setting
 {
@@ -17,6 +17,7 @@ class Setting
     public const SETTING_DISCORD_WEB_HOOK_FOR_CHANGELOGS = 'discord_webhook_for_changelogs';
     public const SETTING_ISSUES_PER_PAGES = 'issues_per_page';
     public const SETTING_CHANGELOGS_PER_PAGES = 'changelogs_per_page';
+    public const SETTING_ROUTE_PREFIX = 'route_prefix';
 
     /**
      * @return Setting[]
@@ -29,6 +30,7 @@ class Setting
             new Setting(self::SETTING_DISCORD_WEB_HOOK_FOR_CHANGELOGS, '', 'nullable', 'url', 'max:255'),
             new Setting(self::SETTING_ISSUES_PER_PAGES, '15', 'required', 'integer', 'max:100'),
             new Setting(self::SETTING_CHANGELOGS_PER_PAGES, '15', 'required', 'integer', 'max:100'),
+            new Setting(self::SETTING_ROUTE_PREFIX, 'jirai', 'required', 'string', 'max:30'),
         ];
     }
 
@@ -99,8 +101,25 @@ class Setting
      *
      * @return string
      */
-    public function getValue() {
+    public function getValue()
+    {
+
+        if ($this->getName() == self::SETTING_ROUTE_PREFIX) {
+
+            if (!Cache::has($this->getDbKey())) {
+                Cache::put($this->getDbKey(), setting($this->getDbKey(), $this->getDefaultValue()), now()->addDay());
+            }
+
+            return Cache::get($this->getDbKey(), function () {
+                return setting($this->getDbKey(), $this->getDefaultValue());
+            });
+        }
+
         return setting($this->getDbKey(), $this->getDefaultValue());
+    }
+
+    public static function clearCachedValues() {
+        Cache::forget(Setting::getSetting(self::SETTING_ROUTE_PREFIX)->getDbKey());
     }
 
     /**

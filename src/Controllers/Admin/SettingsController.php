@@ -4,7 +4,6 @@ namespace Azuriom\Plugin\Jirai\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\Jirai\Models\Setting;
-use Hamcrest\Core\Set;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -30,6 +29,7 @@ class SettingsController extends Controller
         $validated = $this->validate($request, Setting::getRules());
 
         \Azuriom\Models\Setting::updateSettings(Setting::prefixWithDbKey($validated));
+        Setting::clearCachedValues();
 
         return redirect()->route('jirai.admin.settings')->with('success', trans('admin.settings.status.updated'));
     }

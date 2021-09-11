@@ -29,5 +29,6 @@ return [
         'discord_webhook_for_changelogs' => 'Discord webhook for changelogs',
         'issues_per_page' => 'Issues per pages',
         'changelogs_per_page' => 'Changelogs per page',
+        'route_prefix' => 'Route prefix (http://domain.com/{route_prefix_here}/...)',
     ],
 ];
