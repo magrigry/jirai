@@ -25,10 +25,10 @@ class JiraiHomeController extends Controller
 
         return view('jirai::index',
             [
-                'suggestions' => $this->filter(JiraiIssue::TYPE_SUGGESTION, $request->get('filter'))
+                'suggestions' => $this->query(JiraiIssue::TYPE_SUGGESTION)
                     ->paginate(Setting::getSetting(Setting::SETTING_ISSUES_PER_PAGES)->getValue(), ['*'], JiraiIssue::TYPE_SUGGESTION),
 
-                'bugs' => $this->filter(JiraiIssue::TYPE_BUG, $request->get('filter'))
+                'bugs' => $this->query(JiraiIssue::TYPE_BUG)
                     ->paginate(Setting::getSetting(Setting::SETTING_ISSUES_PER_PAGES)->getValue(), ['*'], JiraiIssue::TYPE_BUG),
 
                 'changelogs' => JiraiChangelog::orderByDesc('id')
@@ -43,49 +43,14 @@ class JiraiHomeController extends Controller
      * @param $type
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function filter($type, $filterString)
+    private function query($type): Builder
     {
-
-        $query = JiraiIssue::query()
+        return  JiraiIssue::query()
             ->with('messages')
+            ->with('messages.user')
             ->with('jiraiTags')
             ->with('user')
             ->orderByDesc('id')
-            ->with('user')
             ->where('type', $type);
-
-        if (empty($filterString)) {
-            return $query;
-        }
-
-        $conditions = [];
-
-        preg_match('/status:(close|open)/', $filterString, $status);
-
-        if ($status[1] == 'open') {
-            $conditions[] = ['closed', true];
-        } elseif ($status[1] == 'close') {
-            $conditions[] = ['closed', true];
-        }
-
-        preg_match_all('/tag:(\w+)/', $filterString, $tag);
-
-        foreach ($tag[1] as $tag) {
-            $conditions[] = ['jirai_tags.name', $tag];
-        }
-
-        $query->where(function ($query) use ($conditions) {
-
-            foreach ($conditions as $key => $condition) {
-                if ($key == 0) {
-                    $query->where($condition[0], $condition[1]);
-                    continue;
-                }
-
-                $query->orWhere($condition[0], $condition[1]);
-            }
-        });
-
-        return $query;
     }
 }

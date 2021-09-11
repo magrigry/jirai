@@ -20,8 +20,8 @@ class IssueController extends Controller
 {
 
     public function show(JiraiIssue $issue) {
-        $issue->user();
-        $messages = $issue->messages()->with('user')->get();
+        $issue->load('user', 'messages', 'messages.user', 'messages.user.role');
+        $messages = $issue->messages()->get();
         return view('jirai::issue.show', ['issue' => $issue, 'messages' => $messages]);
     }
 
