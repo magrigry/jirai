@@ -103,18 +103,6 @@ class Setting
      */
     public function getValue()
     {
-
-        if ($this->getName() == self::SETTING_ROUTE_PREFIX) {
-
-            if (!Cache::has($this->getDbKey())) {
-                Cache::put($this->getDbKey(), setting($this->getDbKey(), $this->getDefaultValue()), now()->addDay());
-            }
-
-            return Cache::get($this->getDbKey(), function () {
-                return setting($this->getDbKey(), $this->getDefaultValue());
-            });
-        }
-
         return setting($this->getDbKey(), $this->getDefaultValue());
     }
 
