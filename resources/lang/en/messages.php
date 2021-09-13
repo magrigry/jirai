@@ -26,4 +26,7 @@ return [
     'tags-settings' => 'Tags settings',
     'click_to_see_more' => '[Open to see more](:url)',
     'has_changed_title' => '**:user** has change title ~~:old_title~~ to :new_title',
+    'search_placeholder' => 'Enter an issue ID or title to find it',
+    'no_result' => 'No result...',
+    'search_error' => 'Oups there is an error, page might have expired... try to reload the page',
 ];

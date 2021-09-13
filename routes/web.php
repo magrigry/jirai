@@ -29,3 +29,6 @@ Route::post('/attachments', [AttachmentController::class, 'storeAttachment'])
     ->middleware('can:jirai.post.attachments')
     ->middleware('throttle:10,1')
     ->middleware('throttle:100,3600');
+
+Route::post('fetch/issues', [IssueController::class, 'fetch'])->name('issues.fetch');
+

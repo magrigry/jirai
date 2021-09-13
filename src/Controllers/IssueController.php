@@ -25,6 +25,19 @@ class IssueController extends Controller
         return view('jirai::issue.show', ['issue' => $issue, 'messages' => $messages]);
     }
 
+    public function fetch(Request $request)
+    {
+        if (!$request->has('search')) {
+            return [];
+        }
+
+        return JiraiIssue::select('id', 'title', 'closed')
+            ->where('id', $request->get('search'))
+            ->orWhere('title', 'like','%'.$request->get('search').'%')
+            ->limit(10)
+            ->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

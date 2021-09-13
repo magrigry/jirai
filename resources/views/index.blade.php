@@ -117,3 +117,5 @@
         </div>
     </div>
 @endsection
+
+@include('jirai::search')
