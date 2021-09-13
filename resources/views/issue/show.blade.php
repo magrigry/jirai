@@ -55,20 +55,20 @@
         @else
             <div class="card shadow-sm mb-3">
                 <div class="card-header d-flex justify-content-between">
-                    <div class="d-flex">
-                        <small style="color: grey">
+                    <div class="d-flex ">
+                        <img class="d-flex mr-2 rounded" src="{{ $message->user->getAvatar() }}" alt="{{ $message->user->name }}" height="35">
+                        <span style="color: grey">
                             @lang('messages.posts.posted', ['user' => e($message->user->name), 'date' => format_date($message->created_at, true)])
-                        </small>
-                        <img class="d-flex ml-1 rounded" src="{{ $message->user->getAvatar() }}" alt="{{ $message->user->name }}" height="25">
+                        </span>
                     </div>
                     <div>
                         <div class="d-flex">
                             @hasJiraiMessageDeletePermission($message->user_id)
-                            <a class="btn btn-danger m-2" href="{{ route('jirai.messages.edit', ['message' => $message->id]) }}" >{{ trans('jirai::messages.edit') }}</a>
+                            <a class="btn btn-danger mr-1" href="{{ route('jirai.messages.edit', ['message' => $message->id]) }}" >{{ trans('jirai::messages.edit') }}</a>
                             @endhasJiraiMessageDeletePermission($message->user_id)
 
                             @hasJiraiMessageEditPermission($message->user_id)
-                                <a class="btn btn-danger m-2" href="{{ route('jirai.messages.destroy', ['message' => $message->id]) }}" data-confirm="delete">{{ trans('jirai::messages.delete') }}</a>
+                                <a class="btn btn-danger " href="{{ route('jirai.messages.destroy', ['message' => $message->id]) }}" data-confirm="delete">{{ trans('jirai::messages.delete') }}</a>
                             @endhasJiraiMessageEditPermission($message->user_id)
                         </div>
                     </div>
