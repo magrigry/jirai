@@ -107,7 +107,7 @@ class Setting
     }
 
     public static function clearCachedValues() {
-        Cache::forget(Setting::getSetting(self::SETTING_ROUTE_PREFIX)->getDbKey());
+        Cache::forget('settings');
     }
 
     /**
