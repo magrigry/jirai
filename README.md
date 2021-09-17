@@ -35,7 +35,7 @@ I would appreciate pull request either to improve code quality or improve and ad
 * [x] Add automatic messages when title changes
 * [x] display tags in issues title
 * [ ] Improve UI, mostly text editor, to add ability to mention an issue or a changelog 
-* [ ] Add filters for issues (closed/open/tag/user/search)
+* [x] Add filters for issues (closed/open/tag/user/search) (ctrl +f)
 * [ ] Make an issue privatable so tags role restriction also apply to visibility
 * [ ] French translation *(any Pull Request on github would be appreciated)*
 * [ ] Add discord bot feature to take advantage of discord threads and replace webhooks
