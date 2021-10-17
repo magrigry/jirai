@@ -15,6 +15,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class IssueController extends Controller
 {
@@ -134,6 +135,11 @@ class IssueController extends Controller
      */
     public function destroy(JiraiIssue $issue)
     {
+
+        DB::table('jirai_messages')
+            ->where('jirai_issue_id', $issue->id)
+            ->delete();
+
         $this->middleware('auth');
         $this->userHasDeletePermission($issue);
 
