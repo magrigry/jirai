@@ -11,11 +11,11 @@
 
                     @include('jirai::changelog._form')
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="bi bi-check-lg"></i> {{ trans('messages.actions.save') }}
                     </button>
                     <a href="{{ route('jirai.changelogs.destroy', $changelog) }}" class="btn btn-danger" data-confirm="delete">
-                        <i class="fas fa-trash"></i> {{ trans('messages.actions.delete') }}
+                        <i class="bi bi-trash"></i> {{ trans('messages.actions.delete') }}
                     </a>
                 </form>
             </div>

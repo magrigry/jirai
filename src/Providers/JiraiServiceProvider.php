@@ -10,40 +10,6 @@ class JiraiServiceProvider extends BasePluginServiceProvider
 {
 
     /**
-     * The plugin's global HTTP middleware stack.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        // \Azuriom\Plugin\Jirai\Middleware\ExampleMiddleware::class,
-    ];
-
-    /**
-     * The plugin's route middleware groups.
-     *
-     * @var array
-     */
-    protected $middlewareGroups = [];
-
-    /**
-     * The plugin's route middleware.
-     *
-     * @var array
-     */
-    protected $routeMiddleware = [
-        // 'example' => \Azuriom\Plugin\Jirai\Middleware\ExampleRouteMiddleware::class,
-    ];
-
-    /**
-     * The policy mappings for this plugin.
-     *
-     * @var array
-     */
-    protected $policies = [
-        // User::class => UserPolicy::class,
-    ];
-
-    /**
      * Register any plugin services.
      *
      * @return void
@@ -61,8 +27,6 @@ class JiraiServiceProvider extends BasePluginServiceProvider
      */
     public function boot()
     {
-        // $this->registerPolicies();
-
         $this->loadViews();
 
         $this->loadTranslations();
@@ -89,9 +53,9 @@ class JiraiServiceProvider extends BasePluginServiceProvider
     protected function routeDescriptions()
     {
         return [
-            'jirai.home' => 'jirai::messages.routes-home',
-            'jirai.issues.create' => 'jirai::messages.routes-issue-create',
-            'jirai.changelogs.create' => 'jirai::messages.routes-changelog-create',
+            'jirai.home' => trans('jirai::messages.routes-home'),
+            'jirai.issues.create' => trans('jirai::messages.routes-issue-create'),
+            'jirai.changelogs.create' => trans('jirai::messages.routes-changelog-create'),
         ];
     }
 
@@ -105,28 +69,17 @@ class JiraiServiceProvider extends BasePluginServiceProvider
 
         return [
             'jirai' => [
-                'name' => 'jirai::messages.plugin-name',
+                'name' => trans('jirai::messages.plugin-name'),
                 'type' => 'dropdown',
-                'icon' => 'fas fa-tags',
+                'icon' => 'bi bi-tag',
                 'route' => 'jirai.admin.*',
                 'permission' => 'jirai.admin.settings',
                 'items' => [
-                    'jirai.admin.settings' => 'jirai::messages.global-settings',
-                    'jirai.admin.tags.index' => 'jirai::messages.tags-settings'
+                    'jirai.admin.settings' => trans('jirai::messages.global-settings'),
+                    'jirai.admin.tags.index' => trans('jirai::messages.tags-settings')
                 ]
             ],
         ];
     }
 
-    /**
-     * Return the user navigations routes to register in the user menu.
-     *
-     * @return array
-     */
-    protected function userNavigation()
-    {
-        return [
-            //
-        ];
-    }
 }

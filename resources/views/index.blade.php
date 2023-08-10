@@ -59,7 +59,7 @@
                                         </a>
                                     </h5>
                                     <a href="{{ route('jirai.issues.show', ['issue' => $bug->id]) }}">
-                                        <span class="col-2">{{ $bug->messages->count() }} <i class="fas fa-comment"></i></span>
+                                        <span class="col-2">{{ $bug->messages->count() }} <i class="bi bi-card-text"></i></span>
                                     </a>
                                 </div>
                                 <small style="color: grey">
@@ -102,7 +102,7 @@
                                         </a>
                                     </h5>
                                     <a href="{{ route('jirai.issues.show', ['issue' => $suggestion->id]) }}">
-                                        <span class="col-2">{{ $suggestion->messages->count() }} <i class="fas fa-comment"></i></span>
+                                        <span class="col-2">{{ $suggestion->messages->count() }} <i class="bi bi-card-text"></i></span>
                                     </a>
                                 </div>
                                 <small style="color: grey">

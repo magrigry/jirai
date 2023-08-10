@@ -1,10 +1,10 @@
 @csrf
 
-<div class="form-row">
+<div class="row">
 
-    <div class="form-group col-md-6">
+    <div class="col-md-6">
         <label for="type">Type</label>
-        <select class="custom-select @error('type') is-invalid @enderror" id="type" name="type" required>
+        <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
             @foreach($types as $typeId => $typeTrad)
                 <option
                     value="{{ $typeId }}"
@@ -16,13 +16,13 @@
         </select>
 
         @error('type')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 
-    <div class="form-group col-md-6">
-        <label for="tags">tags</label>
-        <select class="custom-select @error('tags') is-invalid @enderror" id="tags" name="tags[]" multiple>
+    <div class="col-md-6">
+        <label for="tags">Tags</label>
+        <select class="form-select @error('tags') is-invalid @enderror" id="tags" name="tags[]" multiple>
             @foreach($tags as $tag)
                 <option
                     value="{{ $tag->id }}"
@@ -34,27 +34,29 @@
         </select>
 
         @error('tags')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 
-    <div class="form-group col-md-12">
-        <label for="message">{{ trans('jirai::messages.field_title') }}</label>
+    <div class="col-md-12">
+        <label for="title">{{ trans('jirai::messages.field_title') }}</label>
         <input
             type="text" id="title" name="title" required maxlength="100"
             class="form-control @error('title') is-invalid @enderror"
             @if(isset($issue)) value="{{ $issue->title }}" @endif>
 
         @error('title')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 
     @error('message')
-    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+    <div class="col-md-12">
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
+    </div>
     @enderror
 
-    <div class="form-group col-md-12">
+    <div class="col-md-12 mt-4">
         <textarea name="message" data-initialValue="@if(isset($issue)) {{ $issue->message }}@endif" id="markdownEditor"></textarea>
     </div>
 

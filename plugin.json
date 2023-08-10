@@ -11,7 +11,5 @@
         "\\Azuriom\\Plugin\\Jirai\\Providers\\JiraiServiceProvider",
         "\\Azuriom\\Plugin\\Jirai\\Providers\\RouteServiceProvider"
     ],
-    "dependencies": {
-        "azuriom": "^0.4.0"
-    }
+    "azuriom_api": "1.0.0"
 }

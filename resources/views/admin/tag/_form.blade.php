@@ -1,11 +1,11 @@
 @csrf
 
-<div class="form-row">
+<div class="row">
 
-    <div class="form-group col-md-6">
-        <label for="roles">roles</label>
+    <div class="col-md-6">
+        <label for="roles">Roles</label>
 
-        <select class="custom-select @error('roles') is-invalid @enderror" id="roles" name="roles[]" multiple>
+        <select class="form-select @error('roles') is-invalid @enderror" id="roles" name="roles[]" multiple>
             @foreach($roles as $role)
                 <option
                     value="{{ $role->id }}"
@@ -17,12 +17,12 @@
         </select>
 
         @error('roles')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 
-    <div class="form-group col-md-12">
-        <label for="color">CSS classes that should be added to the tag button (<a href="https://getbootstrap.com/docs/4.0/components/buttons/">see here</a>)</label>
+    <div class="col-md-12">
+        <label for="color">CSS classes that should be added to the tag button (<a href="https://getbootstrap.com/docs/5.0/components/buttons/">see here</a>)</label>
         <input
             placeholder="btn-warning"
             type="text" id="color" name="color" required
@@ -30,11 +30,11 @@
             @if(isset($tag)) value="{{ $tag->color }}" @endif>
 
         @error('color')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 
-    <div class="form-group col-md-12">
+    <div class="col-md-12">
         <label for="name">Name of the tag (must be unique)</label>
         <input
             placeholder="Bugs related to my super server"
@@ -43,7 +43,7 @@
             @if(isset($tag)) value="{{ $tag->name }}" @endif>
 
         @error('name')
-        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
         @enderror
     </div>
 

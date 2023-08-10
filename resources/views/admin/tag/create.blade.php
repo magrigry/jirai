@@ -10,7 +10,7 @@
                 @include('jirai::admin/tag/._form')
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> {{ trans('messages.actions.save') }}
+                    <i class="bi bi-check-lg"></i> {{ trans('messages.actions.save') }}
                 </button>
             </form>
         </div>
